@@ -11,102 +11,53 @@ class Connect extends CI_Controller{
         $this->load->model('Functions');
     }
 
-    public function req_mob()
-    {
-        if(isset($_POST['request']))
-        {
-            if($_POST['request'] == 'Sent')
-            {
+    // Get Top Token
+    public function get_top_token_home(){
+        $query = $this->Functions->get_top_token();
+        $val = array();
+        $val['response']= "Success";
+        $val['data'] = $query;
+        echo json_encode($val);
+    }
+
+    // Insert Signup Data
+    public function insert_signup_data() {
+        if(isset($_POST['request'])){
+            if($_POST['request'] == 'Sent'){
                 $userdata['email'] = $_POST['email'];
                 $userdata['password'] = $_POST['password'];
-                
-                $this->Functions->query($userdata);
+                $this->Functions->insert_data($userdata);
                 $reply = array('response'=> $this->success);
                 echo json_encode($reply);
             }
         }
-        else
-        {
+        else {
             $response = array('response' => $this->denied);
             echo json_encode($response);
         }
     }
 
-    // public function Tokens()
-    // {
-    //     if(isset($_POST['request']))
-    //     {
-    //         if($_POST['request'] == 'Sent')
-    //         {
-    //             $this->Functions->get_tk_info();
-    //             $reply = array('response'=> $this->success);
-    //             echo json_encode($reply);
-    //         }
-    //     }
-    //     else
-    //     {
-    //         $response = array('response' => $this->denied);
-    //         echo json_encode($response);
-    //     }
-    // }
-
-    public function get_data(){
-        $query = $this->Functions->select();
-        $val = array();
-        foreach($query as $token){
-            $val['response']= "Success";
-            $val['data'][] = $token;
-        }     
-        echo json_encode($val);
-    
-    }
-
-            //LOGIN FUNCTIONN
-    public function f_login()
-    {
-        if(isset($_POST['request']))
-        {
-            if($_POST['request'] == 'Sent')
-            {
-
+    // Get Login Data
+    public function get_login_data() {
+        if(isset($_POST['request'])) {
+            if($_POST['request'] == 'Sent') {
                 $email = $_POST['email'];
                 $pass = $_POST['password'];
-                $query = $this->Functions->get_login($email, $pass);
+                $query = $this->Functions->get_data($email, $pass);
 
-                if($query == NULL)
-                {
-
+                if($query == NULL) {
                     $response = array('response' => 'Failed');
                     echo json_encode($response);
-
                 }
-                else
-                {
+                else {
                     $response = array('response' => 'Approved');
                     echo json_encode($response);
                 }
             }
         }
-        else 
-        {
+        else {
             $response = array('response' => "access denied");
             echo json_encode($response);
-
-
         }
-
-    }
-
-    //Get Top Token
-    public function get_top_token_home(){
-        $query = $this->Functions->get_token();
-        $val = array();
-        // foreach($query as $token){
-        //     $val['response']= "Success";
-        //     $val['data'][] = $token;
-        // }
-        $val['response']= "Success";
-        $val['data'] = $query;
-        echo json_encode($val);
     }
 }

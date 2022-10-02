@@ -1,13 +1,17 @@
 <?php
 
 class Functions extends CI_Model{
+
+    protected $tbl_users = 'tbl_users';
+    protected $tbl_token = 'tbl_token';
     
     public function __construct(){
         parent::__construct();
         $this->load->database();
     }
 
-    public function get_token(){
+    // Get Top 30 Token Informations
+    public function get_top_token(){
         // $this->db->select("top, token_name, curr_prc, cir_supp");
         // $this->db->from('tbl_token');
         // $query = $this->db->get();        //kunukuha lahat ng content ng query
@@ -31,34 +35,22 @@ class Functions extends CI_Model{
       
     }
 
-    public function query($acc_data)
-    {
+    // Insert Data (Singup)
+    public function insert_data($acc_data) {
         $this->db->insert($this->tbl_users,$acc_data);
     }
 
-    
-
-    public function select(){
-        return $this->db->get('tbl_token')->result();
-    }
-
-    //LOGIN
-    public function get_login($email,$password)
-    {
-
+    // Get Data (Login)
+    public function get_data($email,$password) {
         $this->db->select('email, password');
         $this->db->from($this->tbl_users);
         $this->db->where(array('email'=>$email,
                                 'password'=>$password));
-
         $query = $this->db->get();        //kunukuha lahat ng content ng query 
-
-        if($query->result() == NULL)
-        {
+        if($query->result() == NULL) {
             return NULL;
         }
-        else
-        {
+        else {
             return $query->result();
         }
 
