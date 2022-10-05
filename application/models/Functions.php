@@ -31,8 +31,21 @@ class Functions extends CI_Model{
         else{
             return$query->result();
         }
+    }
 
-      
+    // Get Token Data//////////////
+    public function get_token_data($name) {
+        $query = $this->db
+            ->select("top, token_name, curr_prc, cir_supp, total_vol, token_img, price_24h, symbol, reddit_link, facebook_link, linkedin, discord_invite, twitter, telegram, coin_link, website")
+            ->from('tbl_token')
+            ->like('token_name', $name)
+            ->get();
+        if($query->result() == NULL) {
+            return NULL;
+        }
+        else {
+            return $query->result();
+        }
     }
 
     // Insert Data (Singup)

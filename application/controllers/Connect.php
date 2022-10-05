@@ -11,13 +11,45 @@ class Connect extends CI_Controller{
         $this->load->model('Functions');
     }
 
-    // Get Top Token
+    // Get Top Token Home
     public function get_top_token_home(){
         $query = $this->Functions->get_top_token();
         $val = array();
         $val['response']= "Success";
         $val['data'] = $query;
         echo json_encode($val);
+    }
+
+    // Get Token Detail
+    public function get_token_detail(){
+        if(isset($_POST['request'])){
+            if($_POST['request'] == 'Sent'){
+                $name = $_POST['name'];
+                $query = $this->Functions->get_token_data($name);
+                $val = array();
+                $val = array('response'=> $this->success);
+                $val['data'] = $query;
+                echo json_encode($val);
+            }
+        }
+        else {
+            $response = array('response' => $this->denied);
+            echo json_encode($response);
+        }
+    }
+    //////////////////////////////////////
+    public function get_token_data($name) {
+        $query = $this->db
+            ->select("top, token_name, curr_prc, cir_supp")
+            ->from('tbl_token')
+            ->like('token_name', $name)
+            ->get();
+        if($query->result() == NULL) {
+            return NULL;
+        }
+        else {
+            echo var_dump($query->result());
+        }
     }
 
     // Insert Signup Data
